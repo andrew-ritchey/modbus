@@ -1,0 +1,386 @@
+[
+  {
+    "lookup_value": "40001",
+    "register_id": 0,
+    "description": "Process Value (PV)",
+    "writable": false
+  },
+  {
+    "lookup_value": "40002",
+    "register_id": 1,
+    "description": "Active Setpoint (SP)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40003",
+    "register_id": 2,
+    "description": "Setpoint 1 (SP1)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40004",
+    "register_id": 3,
+    "description": "Setpoint 2 (SP2)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40005",
+    "register_id": 4,
+    "description": "Setpoint Deviation",
+    "writable": false
+  },
+  {
+    "lookup_value": "40006",
+    "register_id": 5,
+    "description": "Alarm 1 Value",
+    "writable": true
+  },
+  {
+    "lookup_value": "40007",
+    "register_id": 6,
+    "description": "Alarm 2 Value",
+    "writable": true
+  },
+  {
+    "lookup_value": "40008",
+    "register_id": 7,
+    "description": "Alarm 3 Value",
+    "writable": true
+  },
+  {
+    "lookup_value": "40009",
+    "register_id": 8,
+    "description": "Output Power 1",
+    "writable": true
+  },
+  {
+    "lookup_value": "40010",
+    "register_id": 9,
+    "description": "Output Power 2",
+    "writable": true
+  },
+  {
+    "lookup_value": "40011",
+    "register_id": 10,
+    "description": "PB Proportional band (Active)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40012",
+    "register_id": 11,
+    "description": "Integral time (Active)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40013",
+    "register_id": 12,
+    "description": "Derivative time (Active)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40014",
+    "register_id": 13,
+    "description": "Integration default (Active)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40015",
+    "register_id": 14,
+    "description": "PID parameter set selection",
+    "writable": true
+  },
+  {
+    "lookup_value": "40016",
+    "register_id": 15,
+    "description": "Auto-Tune Start",
+    "writable": true
+  },
+  {
+    "lookup_value": "40017",
+    "register_id": 16,
+    "description": "Control Mode Transfer (Auto/Manual)",
+    "writable": true
+  },
+  {
+    "lookup_value": "40018",
+    "register_id": 17,
+    "description": "Controller Status",
+    "writable": true
+  },
+  {
+    "lookup_value": "40019",
+    "register_id": 18,
+    "description": "Setpoint Select",
+    "writable": true
+  },
+  {
+    "lookup_value": "40020",
+    "register_id": 19,
+    "description": "SP Ramp Rate",
+    "writable": true
+  },
+  {
+    "lookup_value": "40021",
+    "register_id": 20,
+    "description": "LED Status",
+    "writable": false
+  },
+  {
+    "lookup_value": "40022",
+    "register_id": 21,
+    "description": "Pushbutton Status",
+    "writable": false
+  },
+  {
+    "lookup_value": "40023",
+    "register_id": 22,
+    "description": "Alarm Reset",
+    "writable": true
+  },
+  {
+    "lookup_value": "40024",
+    "register_id": 23,
+    "description": "Setpoint Ramping Disable",
+    "writable": true
+  },
+  {
+    "lookup_value": "40025",
+    "register_id": 24,
+    "description": "Integral Action Disable",
+    "writable": true
+  },
+  {
+    "lookup_value": "40033",
+    "register_id": 32,
+    "description": "Proportional band",
+    "writable": true
+  },
+  {
+    "lookup_value": "40034",
+    "register_id": 33,
+    "description": "Integral time",
+    "writable": true
+  },
+  {
+    "lookup_value": "40035",
+    "register_id": 34,
+    "description": "Derivative time",
+    "writable": true
+  },
+  {
+    "lookup_value": "40036",
+    "register_id": 35,
+    "description": "Integration default",
+    "writable": true
+  },
+  {
+    "lookup_value": "40037",
+    "register_id": 36,
+    "description": "Proportional band",
+    "writable": true
+  },
+  {
+    "lookup_value": "40038",
+    "register_id": 37,
+    "description": "Integral time 2",
+    "writable": true
+  },
+  {
+    "lookup_value": "40039",
+    "register_id": 38,
+    "description": "Derivative time 2",
+    "writable": true
+  },
+  {
+    "lookup_value": "40040",
+    "register_id": 39,
+    "description": "Integration default 2",
+    "writable": true
+  },
+  {
+    "lookup_value": "40041",
+    "register_id": 40,
+    "description": "Output Power Offset",
+    "writable": true
+  },
+  {
+    "lookup_value": "40051",
+    "register_id": 50,
+    "description": "Input Type",
+    "writable": true
+  },
+  {
+    "lookup_value": "40052",
+    "register_id": 51,
+    "description": "Temperature Scale",
+    "writable": true
+  },
+  {
+    "lookup_value": "40053",
+    "register_id": 52,
+    "description": "Decimal Resolution",
+    "writable": true
+  },
+  {
+    "lookup_value": "40054",
+    "register_id": 53,
+    "description": "Digital Filtering",
+    "writable": true
+  },
+  {
+    "lookup_value": "40055",
+    "register_id": 54,
+    "description": "Input Filter Band",
+    "writable": true
+  },
+  {
+    "lookup_value": "40056",
+    "register_id": 55,
+    "description": "Shift/Offset",
+    "writable": true
+  },
+  {
+    "lookup_value": "40057",
+    "register_id": 56,
+    "description": "Display Value Scaling Point 1",
+    "writable": true
+  },
+  {
+    "lookup_value": "40058",
+    "register_id": 57,
+    "description": "Display Value Scaling Point 2",
+    "writable": true
+  },
+  {
+    "lookup_value": "40059",
+    "register_id": 58,
+    "description": "Setpoint Low Limit",
+    "writable": true
+  },
+  {
+    "lookup_value": "40060",
+    "register_id": 59,
+    "description": "Setpoint High Limit",
+    "writable": true
+  },
+  {
+    "lookup_value": "40061",
+    "register_id": 60,
+    "description": "Cold Junction Compensation",
+    "writable": true
+  },
+  {
+    "lookup_value": "40062",
+    "register_id": 61,
+    "description": "User Input 1 Function",
+    "writable": true
+  },
+  {
+    "lookup_value": "40063",
+    "register_id": 62,
+    "description": "User Input 2 Function",
+    "writable": true
+  },
+  {
+    "lookup_value": "40064",
+    "register_id": 63,
+    "description": "F1 Key Function",
+    "writable": true
+  },
+  {
+    "lookup_value": "40065",
+    "register_id": 64,
+    "description": "F2 Key Function",
+    "writable": true
+  },
+  {
+    "lookup_value": "40081",
+    "register_id": 80,
+    "description": "Output Action",
+    "writable": true
+  },
+  {
+    "lookup_value": "40082",
+    "register_id": 81,
+    "description": "Auto Control Mode",
+    "writable": true
+  },
+  {
+    "lookup_value": "40083",
+    "register_id": 82,
+    "description": "Output 1 Cycle Time",
+    "writable": true
+  },
+  {
+    "lookup_value": "40084",
+    "register_id": 83,
+    "description": "Output 1 Power Lower Limit",
+    "writable": true
+  },
+  {
+    "lookup_value": "40085",
+    "register_id": 84,
+    "description": "Output 1 Power High Limit",
+    "writable": true
+  },
+  {
+    "lookup_value": "40086",
+    "register_id": 85,
+    "description": "Input Fail OP1 Power Level",
+    "writable": true
+  },
+  {
+    "lookup_value": "40087",
+    "register_id": 86,
+    "description": "Analog Out 1 Low Scaling",
+    "writable": true
+  },
+  {
+    "lookup_value": "40088",
+    "register_id": 87,
+    "description": "Analog Out 1 High Scaling Value",
+    "writable": true
+  },
+  {
+    "lookup_value": "40091",
+    "register_id": 90,
+    "description": "Output 2 Cycle Time",
+    "writable": true
+  },
+  {
+    "lookup_value": "40092",
+    "register_id": 91,
+    "description": "Output 2 Power Lower Limit",
+    "writable": true
+  },
+  {
+    "lookup_value": "40093",
+    "register_id": 92,
+    "description": "Output 2 Power High Limit",
+    "writable": true
+  },
+  {
+    "lookup_value": "40094",
+    "register_id": 93,
+    "description": "Input Fail OP2",
+    "writable": true
+  },
+  {
+    "lookup_value": "40095",
+    "register_id": 94,
+    "description": "Relative Gain",
+    "writable": true
+  },
+  {
+    "lookup_value": "40096",
+    "register_id": 95,
+    "description": "Deadband/Overlap",
+    "writable": true
+  },
+  {
+    "lookup_value": "40097",
+    "register_id": 96,
+    "description": "On/Off Control Hysteresis 2",
+    "writable": true
+  }
+]

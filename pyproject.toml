@@ -5,7 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "dearpygui>=2.2",
+    "dearpygui>=2.1",
     "minimalmodbus>=2.1.1",
     "serial>=0.0.97",
+]
+
+[tool.uv]
+required-environments = [
+    "sys_platform == 'darwin' and platform_machine == 'x86_64'",
 ]
