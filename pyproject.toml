@@ -1,0 +1,11 @@
+[project]
+name = "modbus"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "dearpygui>=2.2",
+    "minimalmodbus>=2.1.1",
+    "serial>=0.0.97",
+]
