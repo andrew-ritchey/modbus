@@ -77,7 +77,6 @@ def build_ui(registers, instrument):
     ttk.Label(scrollable_frame, text='Value', **header_style).grid(row=0, column=2, padx=5, pady=5)
     ttk.Label(scrollable_frame, text='Actions', **header_style).grid(row=0, column=3, padx=5, pady=5)
 
-    print(registers)
     for idx, item in enumerate(registers, start=1):
         register_id = item.get('register_id')
         desc = item.get('description', f'Register {register_id}')
