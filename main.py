@@ -1,52 +1,11 @@
 import json
+import argparse
 import tkinter as tk
 from tkinter import ttk, messagebox
-import minimalmodbus
-import serial
 
-
-def connect(port='COM8', slave_address=240):
-    instrument = minimalmodbus.Instrument(port, slave_address, debug=False)
-    instrument.serial.baudrate = 38400
-    instrument.serial.bytesize = 8
-    instrument.serial.parity = serial.PARITY_EVEN
-    instrument.serial.stopbits = 1
-    instrument.serial.timeout = 0.5
-    instrument.mode = minimalmodbus.MODE_RTU
-    instrument.clear_buffers_before_each_transaction = True
-    return instrument
-
-
-def query_register(instrument, register_id, entry_widget):
-    try:
-        value = instrument.read_register(register_id)
-        entry_widget.delete(0, tk.END)
-        entry_widget.insert(0, str(value))
-    except Exception as exc:
-        messagebox.showerror(
-            title='Modbus Read Error',
-            message=f'Error reading register {register_id}: {exc}'
-        )
-
-
-def update_register(instrument, register_id, entry_widget):
-    try:
-        text_value = entry_widget.get().strip()
-        if text_value == '':
-            raise ValueError('Input value cannot be empty')
-
-        value = float(text_value)
-        instrument.write_register(register_id, value)
-        messagebox.showinfo(
-            title='Modbus Write',
-            message=f'Successfully wrote {value} to register {register_id}'
-        )
-    except Exception as exc:
-        messagebox.showerror(
-            title='Modbus Write Error',
-            message=f'Error writing register {register_id}: {exc}'
-        )
-
+import connection as conn
+import threading
+import time
 
 def build_ui(registers, instrument):
     root = tk.Tk()
@@ -71,54 +30,233 @@ def build_ui(registers, instrument):
     canvas.pack(side='left', fill='both', expand=True)
     scrollbar.pack(side='right', fill='y')
 
-    header_style = {'font': ('Arial', 10, 'bold')}
-    ttk.Label(scrollable_frame, text='Description', **header_style).grid(row=0, column=0, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Register ID', **header_style).grid(row=0, column=1, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Value', **header_style).grid(row=0, column=2, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Actions', **header_style).grid(row=0, column=3, padx=5, pady=5)
+    # Top controls: Auto-Query checkbox and Rate input (Hz)
+    controls_frame = ttk.Frame(scrollable_frame)
+    controls_frame.grid(row=0, column=0, columnspan=4, sticky='ew', padx=5, pady=(0, 8))
 
-    for idx, item in enumerate(registers, start=1):
+    # Inner frame to center the controls horizontally
+    controls_inner = ttk.Frame(controls_frame)
+    controls_inner.pack(anchor='center')
+
+    auto_query_var = tk.BooleanVar(value=False)
+    auto_query_chk = ttk.Checkbutton(controls_inner, text='Auto-Query', variable=auto_query_var)
+    auto_query_chk.pack(side='left', padx=(0, 12))
+
+    ttk.Label(controls_inner, text='Rate (Hz):').pack(side='left')
+
+    # Validate that the rate entry is a float (allow empty while editing)
+    def validate_float(p):
+        if p == '':
+            return True
+        try:
+            float(p)
+            return True
+        except Exception:
+            return False
+
+    vcmd = controls_inner.register(validate_float)
+    rate_entry = ttk.Entry(controls_inner, width=10, validate='key', validatecommand=(vcmd, '%P'))
+    rate_entry.pack(side='left', padx=(4, 0))
+    rate_entry.insert(0, '1')
+
+    header_style = {'font': ('Arial', 10, 'bold')}
+    ttk.Label(scrollable_frame, text='Description', **header_style).grid(row=1, column=0, padx=5, pady=5)
+    ttk.Label(scrollable_frame, text='Register ID', **header_style).grid(row=1, column=1, padx=5, pady=5)
+    ttk.Label(scrollable_frame, text='Read Value', **header_style).grid(row=1, column=2, padx=5, pady=5)
+    ttk.Label(scrollable_frame, text='Value', **header_style).grid(row=1, column=3, padx=5, pady=5)
+    ttk.Label(scrollable_frame, text='Actions', **header_style).grid(row=1, column=4, padx=5, pady=5)
+
+    def do_query(rid, label_widget):
+        code, payload = conn.query_register(instrument, rid)
+        if code == 0:
+            label_widget.config(text=str(payload))
+        else:
+            messagebox.showerror(
+                title='Modbus Read Error',
+                message=f'Error reading register {rid}: {payload}'
+            )
+
+    def do_update(rid, entry_widget):
+        text_value = entry_widget.get().strip()
+        if text_value == '':
+            messagebox.showerror(
+                title='Modbus Write Error',
+                message='Input value cannot be empty'
+            )
+            return
+        try:
+            value = float(text_value)
+        except ValueError:
+            messagebox.showerror(
+                title='Modbus Write Error',
+                message='Input value must be numeric'
+            )
+            return
+
+        code, payload = conn.update_register(instrument, rid, value)
+        if code == 0:
+            messagebox.showinfo(
+                title='Modbus Write',
+                message=f'Successfully wrote {value} to register {rid}'
+            )
+        else:
+            messagebox.showerror(
+                title='Modbus Write Error',
+                message=f'Error writing register {rid}: {payload}'
+            )
+
+
+    # keep list of entries so auto-query can update them
+    entries_list = []
+    labels_list = []
+
+    for idx, item in enumerate(registers, start=2):
         register_id = item.get('register_id')
         desc = item.get('description', f'Register {register_id}')
 
+        # editable entry for manual updates
         value_entry = ttk.Entry(scrollable_frame, width=20)
+
+        # label to display read/query results (auto-updated)
+        read_label = ttk.Label(scrollable_frame, text='-')
+
+        entries_list.append((register_id, value_entry))
+        labels_list.append((register_id, read_label))
 
         ttk.Label(scrollable_frame, text=desc).grid(row=idx, column=0, sticky='w', padx=5, pady=2)
         ttk.Label(scrollable_frame, text=str(register_id)).grid(row=idx, column=1, sticky='w', padx=5, pady=2)
-        value_entry.grid(row=idx, column=2, padx=5, pady=2)
+        read_label.grid(row=idx, column=2, padx=5, pady=2)
+        value_entry.grid(row=idx, column=3, padx=5, pady=2)
 
         action_frame = ttk.Frame(scrollable_frame)
-        action_frame.grid(row=idx, column=3, padx=5, pady=2)
+        action_frame.grid(row=idx, column=4, padx=5, pady=2)
 
         query_btn = ttk.Button(
             action_frame,
             text='Query',
-            command=lambda rid=register_id, entry=value_entry: query_register(instrument, rid, entry)
+            command=lambda rid=register_id, lbl=read_label: do_query(rid, lbl)
         )
         query_btn.pack(side='left', padx=(0, 4))
-        
+
         if item.get('writable'):
             update_btn = ttk.Button(
                 action_frame,
                 text='Update',
-                command=lambda rid=register_id, entry=value_entry: update_register(instrument, rid, entry)
+                command=lambda rid=register_id, entry=value_entry: do_update(rid, entry)
             )
             update_btn.pack(side='left')
 
+    # Auto-query using a background thread to avoid blocking the UI
+    stop_event = [threading.Event()]
+    worker_thread = [None]
+
+    def worker():
+        while not stop_event[0].is_set() and auto_query_var.get():
+            try:
+                rate_text = rate_entry.get().strip()
+                rate = float(rate_text) if rate_text != '' else 1.0
+            except Exception:
+                rate = 1.0
+            if rate <= 0:
+                rate = 1.0
+            interval = 1.0 / rate
+
+            start_time = time.time()
+            for rid, lbl in labels_list:
+                if stop_event[0].is_set() or not auto_query_var.get():
+                    break
+                try:
+                    code, payload = conn.query_register(instrument, rid)
+                    if code == 0:
+                        # schedule GUI update on main thread to update label text
+                        root.after(0, lambda l=lbl, p=payload: l.config(text=str(p)))
+                except Exception:
+                    # ignore individual read errors during auto-query
+                    pass
+
+            elapsed = time.time() - start_time
+            sleep_time = max(0.0, interval - elapsed)
+            # Sleep in small increments so stop_event can interrupt sooner
+            end_time = time.time() + sleep_time
+            while time.time() < end_time:
+                if stop_event[0].is_set() or not auto_query_var.get():
+                    break
+                time.sleep(0.05)
+
+    def start_auto_query_thread():
+        if worker_thread[0] is None or not worker_thread[0].is_alive():
+            stop_event[0].clear()
+            worker_thread[0] = threading.Thread(target=worker, daemon=True)
+            worker_thread[0].start()
+
+    def stop_auto_query_thread():
+        stop_event[0].set()
+        # don't block UI extensively; give thread a moment to exit
+        if worker_thread[0] is not None:
+            worker_thread[0].join(timeout=0.2)
+            worker_thread[0] = None
+
+    # start/stop when checkbox changes
+    def _on_auto_change(*_):
+        if auto_query_var.get():
+            start_auto_query_thread()
+        else:
+            stop_auto_query_thread()
+
+    auto_query_var.trace_add('write', _on_auto_change)
+
+    def on_close():
+        stop_auto_query_thread()
+        root.destroy()
+
+    root.protocol('WM_DELETE_WINDOW', on_close)
+
     root.mainloop()
+    
 
 
-def main(file_path='redlion_pxu_register.json'):
+def main(file_path='redlion_pxu_register.json', port=None, address=None):
     try:
         with open(file_path, 'r') as f:
             registers = json.load(f)
     except Exception as exc:
         raise RuntimeError(f'Failed to load register file {file_path}: {exc}')
 
-    instrument = connect(port='COM8', slave_address=240)
+    if port is None:
+        raise RuntimeError('Port must be provided')
+
+    instrument = None
+    if address is None:
+        for i in range(247):
+            print(f'Attempting to connect to {port} at address {i+1}')
+            try:
+                instrument = conn.connect(port=port, address=i+1)
+                code, _ = conn.query_register(instrument, 0)  # Try reading register 0
+                if code == 0:
+                    address = i+1
+                    print(f'Successfully connected to {port} at address {address}')
+                    break
+            except Exception:
+                instrument = None
+                continue
+    else:
+        instrument = conn.connect(port=port, address=int(address))
+        code, _ = conn.query_register(instrument, 0)  # Try reading register 0
+        if code != 0:
+            instrument = None
+
+    if instrument is None:
+        raise RuntimeError(f'Failed to connect to Modbus device {port} at address {address}')
+
     build_ui(registers, instrument)
 
 
 if __name__ == '__main__':
-    register_file = 'redlion_pxu_register.json'
-    main(register_file)
+    parser = argparse.ArgumentParser(description='Modbus client GUI launcher')
+    parser.add_argument('-p', '--port', required=True, help='serial port device (e.g. COM3 or /dev/ttyUSB0)')
+    parser.add_argument('-a', '--address', type=int, help='Modbus device address (integer)')
+    parser.add_argument('-f', '--file', default='redlion_pxu_register.json', help='register JSON file')
+
+    args = parser.parse_args()
+
+    main(args.file, args.port, args.address)
