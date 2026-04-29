@@ -169,7 +169,7 @@ def build_ui(registers, instrument):
                     code, payload = conn.query_register(instrument, rid)
                     if code == 0:
                         # schedule GUI update on main thread to update label text
-                        root.after(0, lambda l=lbl, p=payload: l.config(text=str(p)))
+                        root.after(0, lambda label=lbl, p=payload: label.config(text=str(p)))
                 except Exception:
                     # ignore individual read errors during auto-query
                     pass
@@ -215,12 +215,12 @@ def build_ui(registers, instrument):
     
 
 
-def main(file_path='redlion_pxu_register.json', port=None, address=None):
+def main(register='redlion_pxu_register.json', settings='redlion_settings.json', port=None, address=None):
     try:
-        with open(file_path, 'r') as f:
+        with open(register, 'r') as f:
             registers = json.load(f)
     except Exception as exc:
-        raise RuntimeError(f'Failed to load register file {file_path}: {exc}')
+        raise RuntimeError(f'Failed to load register file {register}: {exc}')
 
     if port is None:
         raise RuntimeError('Port must be provided')
@@ -230,7 +230,7 @@ def main(file_path='redlion_pxu_register.json', port=None, address=None):
         for i in range(247):
             print(f'Attempting to connect to {port} at address {i+1}')
             try:
-                instrument = conn.connect(port=port, address=i+1)
+                instrument = conn.connect(port=port, address=i+1, settings=settings)
                 code, _ = conn.query_register(instrument, 0)  # Try reading register 0
                 if code == 0:
                     address = i+1
@@ -240,7 +240,7 @@ def main(file_path='redlion_pxu_register.json', port=None, address=None):
                 instrument = None
                 continue
     else:
-        instrument = conn.connect(port=port, address=int(address))
+        instrument = conn.connect(port=port, address=int(address), settings=settings)
         code, _ = conn.query_register(instrument, 0)  # Try reading register 0
         if code != 0:
             instrument = None
@@ -255,7 +255,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Modbus client GUI launcher')
     parser.add_argument('-p', '--port', required=True, help='serial port device (e.g. COM3 or /dev/ttyUSB0)')
     parser.add_argument('-a', '--address', type=int, help='Modbus device address (integer)')
-    parser.add_argument('-f', '--file', default='redlion_pxu_register.json', help='register JSON file')
+    parser.add_argument('-r', '--register', default='redlion_pxu_register.json', help='JSON file storing the device Modbus register')
+    parser.add_argument('-s', '--settings', default='redlion_settings.json', help='JSON file storing the Modbus connection settings for the device')
 
     args = parser.parse_args()
 

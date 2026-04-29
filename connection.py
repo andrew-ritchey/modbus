@@ -1,15 +1,24 @@
+import json
 import minimalmodbus
 import serial
 
-def connect(port, address):
+
+def connect(port, address, settings=None):
     instrument = minimalmodbus.Instrument(port, address, debug=False)
-    instrument.serial.baudrate = 9600 # 38400 # 
-    instrument.serial.bytesize = 8
-    instrument.serial.parity = serial.PARITY_NONE # serial.PARITY_EVEN # 
-    instrument.serial.stopbits = 1
-    instrument.serial.timeout = 0.5
-    instrument.mode = minimalmodbus.MODE_RTU
-    instrument.clear_buffers_before_each_transaction = True
+    if settings:
+        try:
+            with open(settings, 'r') as f:
+                settings = json.load(f)
+        except Exception as exc:
+            raise RuntimeError(f'Failed to load settings file {settings}: {exc}')
+        
+        instrument.serial.baudrate = settings.get('baudrate') #9600  
+        instrument.serial.bytesize = settings.get('bytesize') #8
+        instrument.serial.parity = getattr(serial, settings.get("parity")) # serial.PARITY_NONE # serial.PARITY_EVEN # 
+        instrument.serial.stopbits = settings.get('stopbits') # 1
+        instrument.serial.timeout = settings.get('timeout') # 0.5
+        instrument.mode = getattr(minimalmodbus, settings.get("mode")) #minimalmodbus.MODE_RTU
+        instrument.clear_buffers_before_each_transaction = settings.get('clearbuffers') #True
     return instrument
 
 
