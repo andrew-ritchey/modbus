@@ -9,6 +9,7 @@ import time
 from collections import deque
 from typing import Any
 
+import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -98,8 +99,8 @@ class DevicePlotWindow:
             if times:
                 any_data = True
                 line = self._lines[buf.label]
-                line.set_xdata(times)
-                line.set_ydata(values)
+                line.set_xdata(np.array(times, dtype='datetime64[ms]'))
+                line.set_ydata(np.array(values))
 
         if any_data:
             self._ax.relim()
