@@ -1,28 +1,39 @@
 import json
 import minimalmodbus
 import serial
+from typing import Any
 
 
-def connect(port, address, settings=None):
+def connect(port: str, address: int, settings: str | dict[str, Any] | None = None) -> minimalmodbus.Instrument:
     instrument = minimalmodbus.Instrument(port, address, debug=True)
     if settings:
-        try:
-            with open(settings, 'r') as f:
-                settings = json.load(f)
-        except Exception as exc:
-            raise RuntimeError(f'Failed to load settings file {settings}: {exc}')
+        # Handle both file paths (string) and dictionaries
+        settings_dict: dict[str, Any]
+        if isinstance(settings, str):
+            try:
+                with open(settings, 'r') as f:
+                    settings_dict = json.load(f)
+            except Exception as exc:
+                raise RuntimeError(f'Failed to load settings file {settings}: {exc}')
+        elif isinstance(settings, dict):
+            settings_dict = settings
+        else:
+            raise RuntimeError(f'Settings must be a file path (str) or dict, got {type(settings)}')
         
-        instrument.serial.baudrate = settings.get('baudrate') #9600  
-        instrument.serial.bytesize = settings.get('bytesize') #8
-        instrument.serial.parity = getattr(serial, settings.get("parity")) # serial.PARITY_NONE # serial.PARITY_EVEN # 
-        instrument.serial.stopbits = settings.get('stopbits') # 1
-        instrument.serial.timeout = settings.get('timeout') # 0.5
-        instrument.mode = getattr(minimalmodbus, settings.get("mode")) #minimalmodbus.MODE_RTU
-        instrument.clear_buffers_before_each_transaction = settings.get('clearbuffers') #True
+        # Ensure serial attribute exists and set properties
+        if instrument.serial:
+            instrument.serial.baudrate = settings_dict.get('baudrate', 9600)
+            instrument.serial.bytesize = settings_dict.get('bytesize', 8)
+            instrument.serial.parity = getattr(serial, settings_dict.get("parity", "PARITY_NONE"))
+            instrument.serial.stopbits = settings_dict.get('stopbits', 1)
+            instrument.serial.timeout = settings_dict.get('timeout', 0.5)
+        
+        instrument.mode = getattr(minimalmodbus, settings_dict.get("mode", "MODE_RTU"))
+        instrument.clear_buffers_before_each_transaction = settings_dict.get('clearbuffers', True)
     return instrument
 
 
-def query_register(instrument, register_id):
+def query_register(instrument: minimalmodbus.Instrument, register_id: int) -> tuple[int, Any]:
     """Read a register value.
 
     Returns a tuple (code, payload).
@@ -36,7 +47,7 @@ def query_register(instrument, register_id):
         return 1, str(exc)
 
 
-def update_register(instrument, register_id, entry_widget):
+def update_register(instrument: minimalmodbus.Instrument, register_id: int, value: float) -> tuple[int, None | str]:
     """Write a numeric value to a register.
 
     `value` should be a number (int or float).
@@ -47,7 +58,7 @@ def update_register(instrument, register_id, entry_widget):
     """
     try:
         # Expect caller to validate/convert input to a numeric value
-        instrument.write_register(register_id, entry_widget)
+        instrument.write_register(register_id, value)
         return 0, None
     except Exception as exc:
         return 1, str(exc)
