@@ -59,12 +59,12 @@ def build_ui(registers, instrument):
     rate_entry.pack(side='left', padx=(4, 0))
     rate_entry.insert(0, '1')
 
-    header_style = {'font': ('Arial', 10, 'bold')}
-    ttk.Label(scrollable_frame, text='Description', **header_style).grid(row=1, column=0, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Register ID', **header_style).grid(row=1, column=1, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Read Value', **header_style).grid(row=1, column=2, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Value', **header_style).grid(row=1, column=3, padx=5, pady=5)
-    ttk.Label(scrollable_frame, text='Actions', **header_style).grid(row=1, column=4, padx=5, pady=5)
+    header_font = ('Arial', 10, 'bold')
+    tk.Label(scrollable_frame, text='Description', font=header_font).grid(row=1, column=0, padx=5, pady=5)
+    tk.Label(scrollable_frame, text='Register ID', font=header_font).grid(row=1, column=1, padx=5, pady=5)
+    tk.Label(scrollable_frame, text='Read Value', font=header_font).grid(row=1, column=2, padx=5, pady=5)
+    tk.Label(scrollable_frame, text='Value', font=header_font).grid(row=1, column=3, padx=5, pady=5)
+    tk.Label(scrollable_frame, text='Actions', font=header_font).grid(row=1, column=4, padx=5, pady=5)
 
     def do_query(rid, label_widget):
         code, payload = conn.query_register(instrument, rid)
@@ -147,8 +147,8 @@ def build_ui(registers, instrument):
             update_btn.pack(side='left')
 
     # Auto-query using a background thread to avoid blocking the UI
-    stop_event = [threading.Event()]
-    worker_thread = [None]
+    stop_event: list[threading.Event] = [threading.Event()]
+    worker_thread: list[threading.Thread | None] = [None]
 
     def worker():
         while not stop_event[0].is_set() and auto_query_var.get():
@@ -227,7 +227,6 @@ def main(register='redlion_pxu_register.json', settings='redlion_settings.json',
 
     instrument = None
 
-    import pdb; pdb.set_trace();
     if address is None:
         for i in range(247):
             print(f'Attempting to connect to {port} at address {i+1}')

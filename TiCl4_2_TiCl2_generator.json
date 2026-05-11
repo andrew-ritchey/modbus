@@ -1,0 +1,220 @@
+{
+  "device1":{
+    "name": "Vessel Heat Tape",
+    "address": 1,
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "PARITY_NONE",
+    "stopbits": 1,
+    "timeout": 0.5,
+    "mode": "MODE_RTU",
+    "clearbuffers": true,
+    "register":[
+      {
+        "lookup_value": "40001",
+        "register_id": 0,
+        "description": "Process Value (PV)",
+        "writable": false
+      },
+      {
+        "lookup_value": "40002",
+        "register_id": 1,
+        "description": "Active Setpoint (SP)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40003",
+        "register_id": 2,
+        "description": "Setpoint 1 (SP1)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40009",
+        "register_id": 8,
+        "description": "Output Power 1",
+        "writable": true
+      },
+      {
+        "lookup_value": "40016",
+        "register_id": 15,
+        "description": "Auto-Tune Start",
+        "writable": true
+      },
+      {
+        "lookup_value": "40017",
+        "register_id": 16,
+        "description": "Control Mode Transfer (Auto/Manual)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40020",
+        "register_id": 19,
+        "description": "SP Ramp Rate",
+        "writable": true
+      },
+      {
+        "lookup_value": "40024",
+        "register_id": 23,
+        "description": "Setpoint Ramping Disable",
+        "writable": true
+      },
+      {
+        "lookup_value": "40053",
+        "register_id": 52,
+        "description": "Decimal Resolution",
+        "writable": true
+      },
+      {
+        "lookup_value": "40082",
+        "register_id": 81,
+        "description": "Auto Control Mode",
+        "writable": true
+      }]
+  },
+  "device2":{
+    "name": "Plumbing Heat Tape",
+    "address": 2,
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "PARITY_NONE",
+    "stopbits": 1,
+    "timeout": 0.5,
+    "mode": "MODE_RTU",
+    "clearbuffers": true,
+    "register":[
+      {
+        "lookup_value": "40001",
+        "register_id": 0,
+        "description": "Process Value (PV)",
+        "writable": false
+      },
+      {
+        "lookup_value": "40002",
+        "register_id": 1,
+        "description": "Active Setpoint (SP)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40003",
+        "register_id": 2,
+        "description": "Setpoint 1 (SP1)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40009",
+        "register_id": 8,
+        "description": "Output Power 1",
+        "writable": true
+      },
+      {
+        "lookup_value": "40016",
+        "register_id": 15,
+        "description": "Auto-Tune Start",
+        "writable": true
+      },
+      {
+        "lookup_value": "40017",
+        "register_id": 16,
+        "description": "Control Mode Transfer (Auto/Manual)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40020",
+        "register_id": 19,
+        "description": "SP Ramp Rate",
+        "writable": true
+      },
+      {
+        "lookup_value": "40024",
+        "register_id": 23,
+        "description": "Setpoint Ramping Disable",
+        "writable": true
+      },
+      {
+        "lookup_value": "40053",
+        "register_id": 52,
+        "description": "Decimal Resolution",
+        "writable": true
+      },
+      {
+        "lookup_value": "40082",
+        "register_id": 81,
+        "description": "Auto Control Mode",
+        "writable": true
+      }]
+  },
+  "device3":{
+    "name": "Pressure Transducer",
+    "address": 3,
+    "baudrate": 9600,
+    "bytesize": 8,
+    "parity": "PARITY_NONE",
+    "stopbits": 1,
+    "timeout": 0.5,
+    "mode": "MODE_RTU",
+    "clearbuffers": true,
+    "register":[
+      {
+        "lookup_value": "40001",
+        "register_id": 0,
+        "description": "Process Value (PV)",
+        "writable": false
+      },
+      {
+        "lookup_value": "40002",
+        "register_id": 1,
+        "description": "Active Setpoint (SP)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40003",
+        "register_id": 2,
+        "description": "Setpoint 1 (SP1)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40009",
+        "register_id": 8,
+        "description": "Output Power 1",
+        "writable": true
+      },
+      {
+        "lookup_value": "40016",
+        "register_id": 15,
+        "description": "Auto-Tune Start",
+        "writable": true
+      },
+      {
+        "lookup_value": "40017",
+        "register_id": 16,
+        "description": "Control Mode Transfer (Auto/Manual)",
+        "writable": true
+      },
+      {
+        "lookup_value": "40020",
+        "register_id": 19,
+        "description": "SP Ramp Rate",
+        "writable": true
+      },
+      {
+        "lookup_value": "40024",
+        "register_id": 23,
+        "description": "Setpoint Ramping Disable",
+        "writable": true
+      },
+      {
+        "lookup_value": "40053",
+        "register_id": 52,
+        "description": "Decimal Resolution",
+        "writable": true
+      },
+      {
+        "lookup_value": "40082",
+        "register_id": 81,
+        "description": "Auto Control Mode",
+        "writable": true
+      }]
+  }
+
+}
+
