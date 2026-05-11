@@ -16,8 +16,10 @@ def build_ui(devices_config: dict[str, Any]):
     main_frame = ttk.Frame(root, padding=10)
     main_frame.pack(fill='both', expand=True)
 
+    # Create canvas with both horizontal and vertical scrollbars
     canvas = tk.Canvas(main_frame)
-    scrollbar = ttk.Scrollbar(main_frame, orient='vertical', command=canvas.yview)
+    v_scrollbar = ttk.Scrollbar(main_frame, orient='vertical', command=canvas.yview)
+    h_scrollbar = ttk.Scrollbar(main_frame, orient='horizontal', command=canvas.xview)
     scrollable_frame = ttk.Frame(canvas)
 
     scrollable_frame.bind(
@@ -26,10 +28,16 @@ def build_ui(devices_config: dict[str, Any]):
     )
 
     canvas.create_window((0, 0), window=scrollable_frame, anchor='nw')
-    canvas.configure(yscrollcommand=scrollbar.set)
+    canvas.configure(yscrollcommand=v_scrollbar.set, xscrollcommand=h_scrollbar.set)
 
-    canvas.pack(side='left', fill='both', expand=True)
-    scrollbar.pack(side='right', fill='y')
+    # Grid layout for canvas and scrollbars
+    canvas.grid(row=0, column=0, sticky='nsew')
+    v_scrollbar.grid(row=0, column=1, sticky='ns')
+    h_scrollbar.grid(row=1, column=0, sticky='ew')
+
+    # Configure grid weights for proper resizing
+    main_frame.grid_rowconfigure(0, weight=1)
+    main_frame.grid_columnconfigure(0, weight=1)
 
     # Connect to all devices
     instruments: dict[str, Any] = {}
