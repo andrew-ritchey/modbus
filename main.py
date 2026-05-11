@@ -85,7 +85,7 @@ def build_ui(devices_config: dict[str, Any]):
             return
         code, payload = conn.query_register(instrument, rid)
         if code == 0:
-            label_widget.config(text=str(payload))
+            label_widget.config(text=str(payload/10))
         else:
             messagebox.showerror(
                 title='Modbus Read Error',
@@ -105,7 +105,7 @@ def build_ui(devices_config: dict[str, Any]):
             )
             return
         try:
-            value = float(text_value)
+            value = float(text_value) * 10
         except ValueError:
             messagebox.showerror(
                 title='Modbus Write Error',
@@ -174,6 +174,7 @@ def build_ui(devices_config: dict[str, Any]):
             query_btn = ttk.Button(
                 action_frame,
                 text='Q',
+                width=20,
                 command=lambda dk=device_key, rid=register_id, lbl=read_label: do_query(dk, rid, lbl)
             )
             query_btn.pack(side='left', padx=1)
@@ -182,6 +183,7 @@ def build_ui(devices_config: dict[str, Any]):
                 update_btn = ttk.Button(
                     action_frame,
                     text='U',
+                    width=20,
                     command=lambda dk=device_key, rid=register_id, entry=value_entry: do_update(dk, rid, entry)
                 )
                 update_btn.pack(side='left', padx=1)
