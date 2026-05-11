@@ -131,7 +131,7 @@ def build_ui(devices_config: dict[str, Any]):
 
         # Device name header (spans multiple columns for this device)
         tk.Label(scrollable_frame, text=device_name, font=header_font).grid(
-            row=1, column=device_column_offset, columnspan=4, padx=5, pady=5, sticky='center'
+            row=1, column=device_column_offset, columnspan=4, padx=5, pady=5, sticky='n'
         )
 
         # Create widgets for each register
