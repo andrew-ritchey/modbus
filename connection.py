@@ -4,7 +4,7 @@ import serial
 
 
 def connect(port, address, settings=None):
-    instrument = minimalmodbus.Instrument(port, address, debug=False)
+    instrument = minimalmodbus.Instrument(port, address, debug=True)
     if settings:
         try:
             with open(settings, 'r') as f:

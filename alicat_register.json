@@ -1,0 +1,44 @@
+[
+  {
+    "lookup_value": "41354",
+    "register_id": 1353,
+    "description": "Current primary pressure reading in engineering units (Float, 32-bit) [cite: 246]",
+    "writable": false
+  },
+  {
+    "lookup_value": "41360",
+    "register_id": 1359,
+    "description": "Current temperature reading in engineering units (Float, 32-bit) [cite: 251]",
+    "writable": false
+  },
+  {
+    "lookup_value": "41297",
+    "register_id": 1296,
+    "description": "Gas number (Integer, 16-bit) [cite: 218]",
+    "writable": false
+  },
+  {
+    "lookup_value": "40046",
+    "register_id": 45,
+    "description": "Legacy Gas number (Integer, 16-bit, used if you need a writable register to change the gas type) [cite: 768]",
+    "writable": true
+  },
+  {
+    "lookup_value": "41362",
+    "register_id": 1361,
+    "description": "Current volumetric flow reading in engineering units (LPM) (Float, 32-bit) [cite: 252]",
+    "writable": false
+  },
+  {
+    "lookup_value": "41364",
+    "register_id": 1363,
+    "description": "Current mass flow reading in engineering units (Standard Flow / SLPM) (Float, 32-bit) [cite: 253]",
+    "writable": false
+  },
+  {
+    "lookup_value": "41350",
+    "register_id": 1349,
+    "description": "Request a new setpoint or read the current setpoint in engineering units (Float, 32-bit) [cite: 244]",
+    "writable": true
+  }
+]

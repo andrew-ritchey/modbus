@@ -226,12 +226,14 @@ def main(register='redlion_pxu_register.json', settings='redlion_settings.json',
         raise RuntimeError('Port must be provided')
 
     instrument = None
+
+    import pdb; pdb.set_trace();
     if address is None:
         for i in range(247):
             print(f'Attempting to connect to {port} at address {i+1}')
             try:
                 instrument = conn.connect(port=port, address=i+1, settings=settings)
-                code, _ = conn.query_register(instrument, 0)  # Try reading register 0
+                code, _ = conn.query_register(instrument, 1353)  # Try reading register 0
                 if code == 0:
                     address = i+1
                     print(f'Successfully connected to {port} at address {address}')
@@ -260,4 +262,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(args.file, args.port, args.address)
+    main(register=args.register, settings=args.settings, port=args.port, address=args.address)
