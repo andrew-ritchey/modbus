@@ -98,7 +98,7 @@
   {
     "lookup_value": "40017",
     "register_id": 16,
-    "description": "Control Mode Transfer (Auto/Manual)",
+    "description": "Control Mode (Auto/Manual)",
     "writable": true
   },
   {

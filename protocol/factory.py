@@ -2,7 +2,7 @@
 
 from typing import Any, Callable
 
-from protcol.device import Device
+from protocol.device import Device
 
 device_creation_funcs: dict[str, Callable[..., Device]] = {}
 

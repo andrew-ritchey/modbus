@@ -36,7 +36,9 @@ class Modbus(minimalmodbus.Instrument):
         """Send command to device"""
         if value is not None:
             try:
-                self.write_register(registeraddress, number_of_decimals, value)
+                self.write_register(registeraddress=registeraddress, 
+                                    number_of_decimals=number_of_decimals, 
+                                    value=value)
                 return 0, f"Write successful. Instrument: {self.name}, Register: {registeraddress}, Value: {value}", None
             except IOError:
                 return 1, f"Write failed. Instrument: {self.name}, Register: {registeraddress}, Value: {value}", None
@@ -46,6 +48,9 @@ class Modbus(minimalmodbus.Instrument):
         except IOError:
             return 1, f"Read failed. Instrument: {self.name}, Register: {registeraddress}, Value: {value}", None
 
+    def ping(self) -> None:
+        """Confirm the device has been created"""
+        print(f"Successfully created {self.name}")
 
 def register() -> None:
     factory.register("modbus", Modbus)

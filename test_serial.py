@@ -1,5 +1,4 @@
 import serial
-import time
 
 # Configuration (Update these to match your specific device and OS)
 SERIAL_PORT = '/dev/tty.usbserial-BG03AAQB'  # Windows: 'COM3', Linux/Mac: '/dev/ttyUSB0'
