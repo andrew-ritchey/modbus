@@ -3,10 +3,11 @@ name = "modbus"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = "==3.13.12"
+requires-python = ">=3.12,<3.13"
 dependencies = [
+    "alicat>=0.9.0",
     "minimalmodbus>=2.1.1",
-    "serial>=0.0.97",
+    "pyserial>=3.5",
 ]
 
 [tool.uv]
