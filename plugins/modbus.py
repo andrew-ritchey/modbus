@@ -1,4 +1,4 @@
-"""Game extension that adds a bard character."""
+"""Plugin for Modbus communication"""
 
 from dataclasses import dataclass
 
